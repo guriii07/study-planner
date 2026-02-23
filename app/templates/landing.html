@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Cozy | Enter Your Space</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Slow, calming animated gradient background */
+        body {
+            background: linear-gradient(-45deg, #fdfbf7, #e3d7ff, #fbdcc4, #d4e0c3);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Outfit', sans-serif; /* Applied the new font */
+            color: #4a4a4a;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Premium glassmorphism effect */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom float animations for the emojis */
+        .float-1 { animation: float 4s ease-in-out infinite; }
+        .float-2 { animation: float 4s ease-in-out infinite 1s; }
+        .float-3 { animation: float 4s ease-in-out infinite 2s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+
+    <div class="glass-panel rounded-[2.5rem] p-10 md:p-16 max-w-lg w-full text-center transform transition duration-500 hover:scale-[1.02]">
+        
+        <div class="flex justify-center gap-6 text-5xl md:text-6xl mb-8">
+            <div class="float-1">🎧</div>
+            <div class="float-2">☁️</div>
+            <div class="float-3">🍵</div>
+        </div>
+
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-800 mb-4">
+            Study Cozy.
+        </h1>
+        
+        <p class="text-xl text-gray-600 mb-10 leading-relaxed font-light">
+            Your mind is cluttered.<br> Let's organize it together. 🫧
+        </p>
+
+        <a href="/dashboard" class="inline-block w-full bg-gray-900 text-white font-semibold text-xl py-4 px-8 rounded-2xl shadow-xl hover:bg-gray-800 hover:shadow-2xl transition-all transform hover:-translate-y-1">
+            Enter Space ✨
+        </a>
+
+        <p class="mt-8 text-sm text-gray-500 font-normal tracking-wide uppercase">
+            An AI companion built for your peace of mind.
+        </p>
+    </div>
+
+</body>
+</html>
