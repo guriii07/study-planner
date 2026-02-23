@@ -4,7 +4,7 @@ from config import Config
 
 client = genai.Client(api_key=Config.GEMINI_API_KEY)
 
-def chat_with_companion(user_message, chat_history):
+def chat_with_companion(user_message, chat_history, daily_hours):
     history_text = ""
     for msg in chat_history:
         role = "User" if msg['role'] == 'user' else "Companion"
@@ -13,6 +13,8 @@ def chat_with_companion(user_message, chat_history):
     prompt = f"""
     You are 'Study Cozy', an empathetic, Gen-Z AI study companion. You are a genius at computer science (like Java, DAA, OS) but act like a supportive friend.
     
+    CRITICAL RULE: The user has a STRICT daily study capacity of {daily_hours} hours. You MUST NOT schedule more than {daily_hours} hours of studying on any single day in the schedule array. Break topics across multiple days if needed to stay under this limit.
+
     Here is the conversation so far:
     {history_text}
     User/System: {user_message}

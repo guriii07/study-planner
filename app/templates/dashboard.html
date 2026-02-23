@@ -72,20 +72,48 @@
             <div id="timelineOutput" class="flex-1 overflow-y-auto space-y-4 pr-2">
                 </div>
         </div>
+        <div class="bento-card lg:col-span-12 p-0 overflow-hidden relative h-32 flex items-center bg-gray-900 group shadow-lg mt-2">
+            <img src="https://img.youtube.com/vi/jfKfPfyJRdk/maxresdefault.jpg" alt="Lofi Girl" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-30 transition duration-500">
+            <div class="relative z-10 p-6 flex justify-between items-center w-full">
+                <div>
+                    <h3 class="font-extrabold text-white text-xl md:text-2xl tracking-tight">Ambient Focus Zone 🎧</h3>
+                    <p class="text-gray-300 text-sm mt-1">Lofi hip hop radio - beats to relax/study to</p>
+                </div>
+                <a href="https://www.youtube.com/watch?v=jfKfPfyJRdk" target="_blank" class="px-6 py-3 bg-white/20 backdrop-blur-md text-white rounded-xl font-bold hover:bg-white/30 transition shadow-lg border border-white/30 flex items-center gap-2">
+                    <span>Tune In</span> <span class="text-xl">📻</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
     </div>
 
-    <div id="settingsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div id="settingsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl">
             <h2 class="text-2xl font-bold mb-6">Settings ⚙️</h2>
-            <button onclick="clearMemory()" class="w-full text-left p-3 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100 transition mb-3">
-                🗑️ Clear Chat Memory
+            
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Daily Study Capacity (Hours) ⏳</label>
+                <input type="number" id="settingHours" value="3" min="1" max="12" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-matcha outline-none transition">
+                <p class="text-xs text-gray-400 mt-2">Gemini will split your topics to fit this daily limit.</p>
+            </div>
+
+            <button id="saveSettingsBtn" class="w-full bg-matcha text-gray-800 p-3 rounded-xl font-bold hover:brightness-95 transition mb-3 shadow-sm">
+                Save Preferences ✅
             </button>
-            <button id="closeSettings" class="w-full mt-4 bg-gray-900 text-white p-3 rounded-xl font-bold hover:bg-gray-800">Close</button>
+            
+            <hr class="my-4 border-gray-100">
+
+            <button onclick="clearMemory()" class="w-full text-left p-3 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100 transition mb-3">
+                🗑️ Wipe Chat Memory
+            </button>
+            <button id="closeSettings" class="w-full bg-gray-900 text-white p-3 rounded-xl font-bold hover:bg-gray-800 transition">Close</button>
         </div>
     </div>
 
     <script>
         let chatHistory = [];
+        let userDailyHours = 3;
         const chatContainer = document.getElementById('chatHistory');
         const timelineOutput = document.getElementById('timelineOutput');
         
@@ -120,7 +148,7 @@
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message, history: chatHistory })
+                    body: JSON.stringify({ message: message, history: chatHistory, daily_hours: userDailyHours })
                 });
 
                 const result = await response.json();
@@ -220,6 +248,16 @@
             widgetDaysLeft.innerText = '-';
             appendMessage('ai', "Memory wiped! 🧼 What are we studying next?");
             modal.classList.add('hidden');
+
+        // Save Settings Logic
+        document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+            const newHours = document.getElementById('settingHours').value;
+            userDailyHours = parseFloat(newHours);
+            modal.classList.add('hidden');
+            
+            // Have the AI confirm the change in the chat!
+            appendMessage('ai', `Settings updated! ⚙️ I will now limit your schedule to a maximum of ${userDailyHours} hours per day.`);
+        });    
         };
     </script>
 </body>

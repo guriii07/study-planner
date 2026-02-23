@@ -24,12 +24,13 @@ def api_chat():
     
     user_message = data.get('message')
     chat_history = data.get('history', []) 
+    daily_hours = data.get('daily_hours', 3)
     
     if not user_message:
         return jsonify({'error': 'Message is empty'}), 400
         
     # Send the conversation to our newly upgraded Gemini brain
-    ai_response = chat_with_companion(user_message, chat_history)
+    ai_response = chat_with_companion(user_message, chat_history, daily_hours)
     
     return jsonify({
         'status': 'success',
