@@ -24,65 +24,75 @@
         }
     </script>
     <style>
-        body { background-color: #fdfbf7; color: #4a4a4a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        body { background-color: #fdfbf7; color: #4a4a4a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.85); /* Slightly less transparent to hide character */
+            backdrop-filter: blur(12px); 
+            border-radius: 1.5rem; 
+            border: 1px solid rgba(255, 255, 255, 0.9); 
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); 
+        }
     </style>
 </head>
-<body class="min-h-screen p-6 md:p-12">
+<body class="min-h-screen p-6 md:p-12 flex flex-col items-center justify-center">
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-4xl w-full mx-auto">
         <header class="text-center mb-10">
-            <h1 class="text-4xl font-bold mb-2 text-textDark">Your Study Companion 🌱</h1>
+            <h1 class="text-4xl font-bold mb-2 text-textDark">Study Cozy 🌱</h1>
             <p class="text-lg text-gray-500">Stress-free scheduling for your next big exam.</p>
         </header>
 
-        <div class="glass-card p-8 mb-10">
-            <form id="studyForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="group relative w-full flex justify-center">
+            
+            <img src="http://googleusercontent.com/image_generation_content/5" 
+                 alt="Pointing Character" 
+                 class="absolute top-1/2 -translate-y-1/2 right-[5%] w-48 z-0 opacity-0 group-hover:opacity-100 group-hover:translate-x-32 transition-all duration-500 cubic-bezier(0.175, 0.885, 0.32, 1.275) pointer-events-none hidden md:block">
+
+            <div class="glass-card p-8 mb-10 relative z-10 w-full">
+                <form id="studyForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">What exam are you studying for?</label>
+                            <input type="text" id="examName" placeholder="e.g., Operating Systems" class="w-full p-3 rounded-xl border-none bg-white shadow-sm focus:ring-2 focus:ring-matcha outline-none transition" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">When is the exam?</label>
+                            <input type="date" id="examDate" class="w-full p-3 rounded-xl border-none bg-white shadow-sm focus:ring-2 focus:ring-matcha outline-none transition" required>
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="block text-sm font-semibold mb-2">What exam are you studying for?</label>
-                        <input type="text" id="examName" placeholder="e.g., Operating Systems" class="w-full p-3 rounded-xl border-none bg-white shadow-sm focus:ring-2 focus:ring-matcha outline-none" required>
+                        <label class="block text-sm font-semibold mb-2">Daily Study Capacity (Hours)</label>
+                        <input type="number" id="dailyHours" placeholder="e.g., 3" class="w-full p-3 rounded-xl border-none bg-white shadow-sm focus:ring-2 focus:ring-matcha outline-none max-w-[200px] transition" required>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">When is the exam?</label>
-                        <input type="date" id="examDate" class="w-full p-3 rounded-xl border-none bg-white shadow-sm focus:ring-2 focus:ring-matcha outline-none" required>
+
+                    <div id="syllabusContainer" class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                        <label class="block text-sm font-semibold mb-3">Add your topics & confidence level</label>
+                        <div class="flex gap-2 mb-2 topic-row">
+                            <input type="text" placeholder="Topic Name (e.g., Threads)" class="topic-name flex-1 p-3 rounded-lg border border-gray-200 shadow-sm outline-none focus:ring-2 focus:ring-matcha">
+                            <select class="topic-confidence p-3 rounded-lg border border-gray-200 shadow-sm outline-none bg-white focus:ring-2 focus:ring-matcha">
+                                <option value="weak">Weak 😥</option>
+                                <option value="medium">Medium 😐</option>
+                                <option value="strong">Strong 😎</option>
+                            </select>
+                        </div>
+                        <button type="button" id="addTopicBtn" class="text-sm font-bold text-gray-500 hover:text-matcha mt-2 transition">+ Add another topic</button>
                     </div>
-                </div>
 
-                <div>
-                    <label class="block text-sm font-semibold mb-2">Daily Study Capacity (Hours)</label>
-                    <input type="number" id="dailyHours" placeholder="e.g., 3" class="w-full p-3 rounded-xl border-none bg-white shadow-sm focus:ring-2 focus:ring-matcha outline-none max-w-[200px]" required>
-                </div>
-
-                <div id="syllabusContainer" class="p-4 bg-white bg-opacity-50 rounded-xl">
-                    <label class="block text-sm font-semibold mb-3">Add your topics & confidence level</label>
-                    <div class="flex gap-2 mb-2 topic-row">
-                        <input type="text" placeholder="Topic Name (e.g., Threads)" class="topic-name flex-1 p-2 rounded-lg border-none shadow-sm outline-none">
-                        <select class="topic-confidence p-2 rounded-lg border-none shadow-sm outline-none bg-white">
-                            <option value="weak">Weak 😥</option>
-                            <option value="medium">Medium 😐</option>
-                            <option value="strong">Strong 😎</option>
-                        </select>
-                    </div>
-                    <button type="button" id="addTopicBtn" class="text-sm font-semibold text-gray-600 hover:text-matcha mt-2">+ Add another topic</button>
-                </div>
-
-                <button type="submit" class="w-full bg-textDark text-white font-bold py-4 rounded-xl shadow-lg hover:bg-gray-800 transition transform hover:-translate-y-1">
-                    Generate My Cozy Schedule ✨
-                </button>
-            </form>
+                    <button type="submit" class="w-full bg-gray-900 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-gray-800 transition transform hover:-translate-y-1 hover:shadow-xl group-hover:ring-4 ring-matcha/50">
+                        Enter Workspace ✨
+                    </button>
+                </form>
+            </div>
         </div>
 
         <div id="loadingState" class="hidden text-center py-10">
-            <p class="text-xl animate-pulse">Brewing your study plan... 🍵</p>
+            <p class="text-xl animate-pulse font-medium text-gray-600">Brewing your study plan... 🍵</p>
         </div>
-
-        <div id="scheduleOutput" class="space-y-6">
-            </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script>
+    <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')

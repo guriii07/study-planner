@@ -1,5 +1,6 @@
 import json
 from google import genai
+from google.genai import types  # <-- Add this import for the config types
 from config import Config
 
 client = genai.Client(api_key=Config.GEMINI_API_KEY)
@@ -10,6 +11,8 @@ def chat_with_companion(user_message, chat_history, daily_hours):
         role = "User" if msg['role'] == 'user' else "Companion"
         history_text += f"{role}: {msg['content']}\n"
 
+    # Notice I removed the massive JSON schema from the prompt text
+    # because Gemini will handle it natively now!
     prompt = f"""
     You are 'Study Cozy', an empathetic, Gen-Z AI study companion. You are a genius at computer science (like Java, DAA, OS) but act like a supportive friend.
     
@@ -24,39 +27,23 @@ def chat_with_companion(user_message, chat_history, daily_hours):
     2. Extract the 'Goal Name' and 'Days Left' from the conversation. BE INTUITIVE: If they say "plan me a week to study Java", the name is "Java" and days left is 7. If they say "DAA exam in 3 days", name is "DAA" and days left is 3.
     3. The user can mark tasks as completed. If a message says "System Update: User completed...", cheer them on!
     4. If the user says they are falling behind or missed a day, recalculate the remaining topics into a new, stress-free schedule. Do not scold them.
-
-    You MUST return ONLY a raw JSON object matching this exact structure:
-    {{
-      "reply": "Your conversational response.",
-      "exam_metadata": {{
-         "name": "Goal/Exam Name (e.g., Java Polymorphism)",
-         "days_left": 7
-      }},
-      "has_schedule": true/false,
-      "schedule": [
-        {{
-          "day": 1,
-          "topics": ["Topic 1"],
-          "estimated_hours": 2.5,
-          "vibe": "Super short motivational note."
-        }}
-      ]
-    }}
+    
+    Output strictly as a JSON object with keys: "reply" (string), "exam_metadata" (object with "name" and "days_left"), "has_schedule" (boolean), and "schedule" (array of objects with "day", "topics", "estimated_hours", and "vibe").
     """
 
     try:
+        # The Magic Sauce: Force the model to return valid JSON automatically
         response = client.models.generate_content(
             model='gemini-2.5-flash',
-            contents=prompt
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+            )
         )
         
-        raw_text = response.text.strip()
-        if raw_text.startswith('```json'):
-            raw_text = raw_text[7:]
-        if raw_text.endswith('```'):
-            raw_text = raw_text[:-3]
-            
-        return json.loads(raw_text.strip())
+        # Look how clean this is! No more .replace() or slicing!
+        return json.loads(response.text)
+        
     except Exception as e:
         print(f"AI Generation Error: {e}")
         return {

@@ -19,87 +19,124 @@
     <style>
         body { background-color: #fdfbf7; font-family: 'Outfit', sans-serif; color: #4a4a4a; }
         .bento-card {
-            background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 1.5rem; box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03); transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 1.5rem; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 10px 40px -10px rgba(100, 110, 140, 0.08);      
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #d4e0c3; border-radius: 10px; }
         
         /* Checkbox animation */
-        .task-checkbox:checked + label { text-decoration: line-through; color: #9ca3af; }
+        .task-checkbox:checked + label { text-decoration: line-through; color: #9ca3af; opacity: 0.6; }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 relative">
 
-    <nav class="max-w-7xl mx-auto flex justify-between items-center mb-8 px-4">
-        <div class="text-2xl font-extrabold tracking-tight">Study Cozy <span class="text-matcha">🪴</span></div>
-        <button id="settingsBtn" class="bg-white rounded-full p-2 shadow-sm border border-gray-100 hover:bg-gray-50 transition">⚙️ Settings</button>
-    </nav>
+    <nav class="max-w-[90rem] mx-auto flex justify-between items-center mb-8 px-4 relative">
+    <div class="text-2xl font-extrabold tracking-tight">Study Cozy <span class="text-matcha">🐥</span></div>
+    
+    <div class="relative group">
+        <button id="menuDropdownBtn" class="flex items-center gap-2 bg-white rounded-full px-4 py-2 text-sm font-bold shadow-sm border border-gray-100 hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-matcha">
+            <span>Menu</span>
+            <span class="text-xs">▼</span>
+        </button>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-140px)]">
+        <div id="dropdownMenu" class="absolute right-0 mt-2 w-56 bg-white/90 backdrop-blur-md border border-gray-100 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50 overflow-hidden">
+    <div class="p-2 space-y-1">
+        <button id="pastPlansBtn" class="w-full text-left px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-matcha/20 rounded-xl transition flex items-center gap-2">
+            <span>📚</span> My Past Plans
+        </button>
+        <button id="pomodoroBtn" class="w-full text-left px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-matcha/20 rounded-xl transition flex items-center gap-2">
+            <span>⏱️</span> Pomodoro Timer
+        </button>
+        
+        <hr class="border-gray-100 my-1">
+        
+        <button id="settingsBtn" class="w-full text-left px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-matcha/20 rounded-xl transition flex items-center gap-2">
+            <span>⚙️</span> Preferences
+        </button>
+        
+        <button id="logoutBtn" class="w-full text-left px-4 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 rounded-xl transition flex items-center gap-2">
+            <span>👋</span> Log Out
+        </button>
+    </div>
+</div>
+    </div>
+</nav>
+
+    <div class="max-w-[90rem] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-140px)]">
 
         <div class="bento-card lg:col-span-8 p-6 flex flex-col justify-center bg-gradient-to-r from-lavender/30 to-transparent">
-            <h2 class="text-2xl font-bold mb-2">How's the energy today? ☁️</h2>
-            <div class="flex gap-3 mt-2">
-                <button onclick="sendQuickMessage('I have high energy today, let\'s tackle the hard stuff!')" class="px-4 py-2 bg-white rounded-xl text-sm font-semibold shadow-sm hover:ring-2 ring-lavender transition">High Energy ⚡️</button>
-                <button onclick="sendQuickMessage('I am completely burnt out today. I need an easier schedule.')" class="px-4 py-2 bg-white rounded-xl text-sm font-semibold shadow-sm hover:ring-2 ring-lavender transition">Burnt Out 🫠</button>
+            <h2 class="text-xl font-bold mb-3">How's the energy today? 🌞</h2>
+            <div class="flex gap-3">
+                <button onclick="sendQuickMessage('I have high energy today, let\'s tackle the hard stuff!')" class="px-5 py-2.5 bg-white rounded-xl text-sm font-bold shadow-sm hover:ring-2 ring-lavender transition hover:-translate-y-0.5">High Energy ⚡️</button>
+                <button onclick="sendQuickMessage('I am completely burnt out today. I need an easier schedule.')" class="px-5 py-2.5 bg-white rounded-xl text-sm font-bold shadow-sm hover:ring-2 ring-lavender transition hover:-translate-y-0.5">Burnt Out 🫠</button>
             </div>
         </div>
 
         <div class="bento-card lg:col-span-4 p-6 flex items-center justify-between bg-peach/20">
             <div>
-                <p class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Next Exam</p>
-                <h3 id="widgetExamName" class="text-xl font-extrabold text-gray-800">Tell me in chat...</h3>
+                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Upcoming Exam</p>
+                <h3 id="widgetExamName" class="text-lg font-extrabold text-gray-800">Let's plan something...</h3>
             </div>
             <div class="text-right">
-                <span id="widgetDaysLeft" class="text-4xl font-extrabold text-gray-800">-</span>
-                <p class="text-xs font-semibold text-gray-500 uppercase">Days Left</p>
+                <span id="widgetDaysLeft" class="text-3xl font-extrabold text-gray-800">-</span>
+                <p class="text-[10px] font-bold text-gray-500 uppercase">Days Left</p>
             </div>
         </div>
 
-        <div class="bento-card lg:col-span-8 lg:row-span-2 p-6 flex flex-col h-[500px] lg:h-auto">
+        <div class="bento-card lg:col-span-8 lg:row-span-2 p-6 flex flex-col h-[550px] lg:h-auto bg-white/50">
+            <h3 class="font-extrabold text-xl mb-4 text-gray-800">Your Master Plan 📅</h3>
+            <div id="timelineOutput" class="flex-1 overflow-y-auto space-y-4 pr-2">
+                <div class="text-center py-20 text-gray-400 font-medium">Chat with your AI Companion to build your schedule!</div>
+            </div>
+        </div>
+
+        <div class="bento-card lg:col-span-4 lg:row-span-2 p-5 flex flex-col h-[550px] lg:h-auto bg-gray-50/50">
+            <h3 class="font-bold text-sm text-gray-500 uppercase tracking-wider mb-4 px-2">Cozy Companion</h3>
             <div id="chatHistory" class="flex-1 overflow-y-auto space-y-4 pr-2 mb-4">
                 </div>
-            <form id="chatForm" class="relative">
-                <input type="text" id="chatInput" placeholder="Tell me what to plan..." class="w-full bg-white border-none shadow-inner rounded-2xl py-4 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-matcha">
-                <button type="submit" class="absolute right-2 top-2 bg-gray-900 text-white p-2 rounded-xl hover:bg-gray-700 transition">↑</button>
+            <form id="chatForm" class="relative mt-2">
+                <input type="text" id="chatInput" placeholder="Tell me what to plan..." class="w-full bg-white border border-gray-200 shadow-sm rounded-2xl py-4 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-matcha transition text-sm">
+                <button type="submit" class="absolute right-2 top-2 bg-gray-900 text-white w-10 h-10 rounded-xl hover:bg-gray-700 transition flex items-center justify-center font-bold">↑</button>
             </form>
         </div>
 
-        <div class="bento-card lg:col-span-4 lg:row-span-2 p-6 flex flex-col h-[500px] lg:h-auto">
-            <h3 class="font-bold text-lg mb-4">Your Schedule 📅</h3>
-            <div id="timelineOutput" class="flex-1 overflow-y-auto space-y-4 pr-2">
-                </div>
-        </div>
-        <div class="bento-card lg:col-span-12 p-0 overflow-hidden relative h-32 flex items-center bg-gray-900 group shadow-lg mt-2">
-            <img src="https://img.youtube.com/vi/jfKfPfyJRdk/maxresdefault.jpg" alt="Lofi Girl" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-30 transition duration-500">
-            <div class="relative z-10 p-6 flex justify-between items-center w-full">
-                <div>
-                    <h3 class="font-extrabold text-white text-xl md:text-2xl tracking-tight">Ambient Focus Zone 🎧</h3>
-                    <p class="text-gray-300 text-sm mt-1">Lofi hip hop radio - beats to relax/study to</p>
-                </div>
-                <a href="https://www.youtube.com/watch?v=jfKfPfyJRdk" target="_blank" class="px-6 py-3 bg-white/20 backdrop-blur-md text-white rounded-xl font-bold hover:bg-white/30 transition shadow-lg border border-white/30 flex items-center gap-2">
-                    <span>Tune In</span> <span class="text-xl">📻</span>
-                </a>
-            </div>
+        <div class="lg:col-span-12 relative overflow-hidden bento-card border-white/60 bg-white/40 h-24 flex items-center justify-between p-4 px-6 group">
+    
+    <img src="https://img.youtube.com/vi/jfKfPfyJRdk/maxresdefault.jpg" alt="Lofi Girl" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-30 mix-blend-multiply transition duration-700 blur-sm pointer-events-none">
+    
+    <div class="relative z-10 flex items-center gap-4 w-full">
+        <div class="w-14 h-14 rounded-full overflow-hidden border-[3px] border-white shadow-sm flex-shrink-0 relative group-hover:animate-[spin_4s_linear_infinite]">
+            <img src="https://img.youtube.com/vi/jfKfPfyJRdk/maxresdefault.jpg" alt="Album Art" class="w-full h-full object-cover scale-150">
+            <div class="absolute inset-0 bg-black/10 rounded-full"></div>
+            <div class="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border border-gray-200"></div>
         </div>
 
-    </div>
-    </div>
+        <div class="flex-1">
+            <h3 class="font-extrabold text-gray-800 text-lg tracking-tight leading-none">Ambient Focus Zone</h3>
+            <p class="text-gray-500 text-xs font-medium mt-1">Lofi hip hop radio • Beats to relax/study to</p>
+        </div>
 
-    <div id="settingsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
+        <a href="https://www.youtube.com/watch?v=jfKfPfyJRdk" target="_blank" class="w-12 h-12 bg-white text-gray-800 rounded-full font-bold hover:bg-gray-50 hover:scale-105 transition-all shadow-md border border-gray-100 flex items-center justify-center text-xl flex-shrink-0">
+            ▶
+        </a>
+    </div>
+</div>
+
+    <div id="settingsModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl">
             <h2 class="text-2xl font-bold mb-6">Settings ⚙️</h2>
             
             <div class="mb-6">
                 <label class="block text-sm font-bold text-gray-700 mb-2">Daily Study Capacity (Hours) ⏳</label>
                 <input type="number" id="settingHours" value="3" min="1" max="12" class="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-matcha outline-none transition">
-                <p class="text-xs text-gray-400 mt-2">Gemini will split your topics to fit this daily limit.</p>
+                <p class="text-xs text-gray-400 mt-2">Your topics will split to fit this daily limit.</p>
             </div>
 
             <button id="saveSettingsBtn" class="w-full bg-matcha text-gray-800 p-3 rounded-xl font-bold hover:brightness-95 transition mb-3 shadow-sm">
-                Save Preferences ✅
+                Save Preferences ✔️
             </button>
             
             <hr class="my-4 border-gray-100">
@@ -110,6 +147,36 @@
             <button id="closeSettings" class="w-full bg-gray-900 text-white p-3 rounded-xl font-bold hover:bg-gray-800 transition">Close</button>
         </div>
     </div>
+
+    <div id="pomodoroModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+        <h2 class="text-2xl font-bold mb-2">Focus Time ⏱️</h2>
+        <p class="text-sm text-gray-500 mb-6">25 minutes of deep work.</p>
+        
+        <div class="text-6xl font-extrabold text-gray-800 mb-8 font-outfit tracking-tight" id="timerDisplay">
+            25:00
+        </div>
+
+        <div class="flex gap-3 mb-4">
+            <button id="startTimerBtn" class="flex-1 bg-gray-900 text-white p-3 rounded-xl font-bold hover:bg-gray-800 transition shadow-sm">Start</button>
+            <button id="resetTimerBtn" class="px-6 bg-gray-100 text-gray-600 p-3 rounded-xl font-bold hover:bg-gray-200 transition">Reset</button>
+        </div>
+        
+        <button id="closePomodoro" class="w-full bg-white border border-gray-200 text-gray-600 p-3 rounded-xl font-bold hover:bg-gray-50 transition">Close</button>
+    </div>
+</div>
+
+<div id="pastPlansModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl">
+        <h2 class="text-2xl font-bold mb-4">Past Plans 📚</h2>
+        
+        <div class="bg-peach/20 border border-peach border-dashed rounded-xl p-6 text-center mb-6">
+            <p class="text-gray-600 font-medium text-sm">We need to wire up your database first so we can save your master plans permanently! 🛠️</p>
+        </div>
+
+        <button id="closePastPlans" class="w-full bg-gray-900 text-white p-3 rounded-xl font-bold hover:bg-gray-800 transition">Close</button>
+    </div>
+</div>
 
     <script>
         let chatHistory = [];
@@ -131,7 +198,6 @@
             if(msg) handleUserMessage(msg);
         });
 
-        // Global function for the Vibe Check buttons
         window.sendQuickMessage = function(msg) {
             handleUserMessage(msg);
         };
@@ -156,14 +222,13 @@
 
                 if (result.status === 'success') {
                     const data = result.data;
-                    console.log("AI Brain Output:", data); // ✨ Added this so you can debug!
+                    console.log("AI Brain Output:", data); 
                     
                     appendMessage('ai', data.reply);
                     
                     chatHistory.push({ role: 'user', content: message });
                     chatHistory.push({ role: 'model', content: data.reply });
 
-                    // Smarter Widget Update Logic
                     if(data.exam_metadata && data.exam_metadata.name) {
                         if(data.exam_metadata.name !== "TBD" && data.exam_metadata.name !== "null") {
                             widgetExamName.innerText = data.exam_metadata.name;
@@ -173,7 +238,6 @@
                         }
                     }
 
-                    // Render interactive timeline
                     if (data.has_schedule && data.schedule.length > 0) {
                         renderTimeline(data.schedule);
                     }
@@ -184,41 +248,52 @@
             }
         }
 
-        function renderTimeline(scheduleArray) {
-            timelineOutput.innerHTML = ''; 
-            scheduleArray.forEach((plan, index) => {
-                const card = document.createElement('div');
-                card.className = `bg-white p-4 rounded-xl shadow-sm border-l-4 ${index === 0 ? 'border-matcha' : 'border-gray-200'} mb-4 transition`;
-                
-                // Add an interactive checkbox!
-                card.innerHTML = `
-                    <div class="flex items-start gap-3">
-                        <input type="checkbox" id="day-${plan.day}" class="task-checkbox mt-1 w-4 h-4 text-matcha bg-gray-100 rounded border-gray-300 focus:ring-matcha cursor-pointer">
-                        <label for="day-${plan.day}" class="cursor-pointer flex-1">
-                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wide block">Day ${plan.day} • ${plan.estimated_hours} Hrs</span>
-                            <h4 class="font-bold mt-1 text-sm text-gray-800 transition-colors">${plan.topics.join(' + ')}</h4>
-                            <p class="text-xs text-gray-500 mt-1 italic">✨ ${plan.vibe}</p>
-                        </label>
-                    </div>
-                `;
-                
-                // Event listener to tell the AI when you finish a task
-                const checkbox = card.querySelector('input');
-                checkbox.addEventListener('change', (e) => {
-                    if(e.target.checked) {
-                        handleUserMessage(`System Update: The user just completed Day ${plan.day} (${plan.topics.join(', ')}). Acknowledge this and cheer them on!`, true);
-                    }
-                });
+       function renderTimeline(scheduleArray) {
+    timelineOutput.innerHTML = ''; 
+    scheduleArray.forEach((plan, index) => {
+        const card = document.createElement('div');
+        card.className = `bg-white p-4 rounded-xl shadow-sm border-l-4 ${index === 0 ? 'border-matcha' : 'border-gray-200'} mb-4 transition hover:shadow-md`;
+        
+        // Map the topics into a clean, bulleted list instead of joining them with ' + '
+        const topicsList = plan.topics.map(topic => 
+            `<li class="flex items-start gap-2 text-[13px] text-gray-800 leading-snug">
+                <span class="text-matcha text-lg leading-none mt-[1px]">•</span>
+                <span class="font-medium">${topic}</span>
+            </li>`
+        ).join('');
 
-                timelineOutput.appendChild(card);
-            });
-        }
+        card.innerHTML = `
+            <div class="flex items-start gap-3">
+                <input type="checkbox" id="day-${plan.day}" class="task-checkbox mt-1 w-5 h-5 text-matcha bg-gray-100 rounded border-gray-300 focus:ring-matcha cursor-pointer transition">
+                <label for="day-${plan.day}" class="cursor-pointer flex-1 transition-all">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wide block mb-2">Day ${plan.day} • ${plan.estimated_hours} Hrs</span>
+                    
+                    <ul class="space-y-1.5 mb-3">
+                        ${topicsList}
+                    </ul>
+                    
+                    <p class="text-xs text-gray-500 font-medium bg-gray-50 inline-block px-2 py-1 rounded-md border border-gray-100">✨ ${plan.vibe}</p>
+                </label>
+            </div>
+        `;
+        
+        const checkbox = card.querySelector('input');
+        checkbox.addEventListener('change', (e) => {
+            if(e.target.checked) {
+                handleUserMessage(`System Update: The user just completed Day ${plan.day} (${plan.topics.join(', ')}). Acknowledge this and cheer them on!`, true);
+            }
+        });
+
+        timelineOutput.appendChild(card);
+    });
+}
 
         function appendMessage(sender, text) {
             const div = document.createElement('div');
+            // Adjusted styles for the right-side layout
             div.className = sender === 'user' 
-                ? 'bg-gray-800 text-white p-4 rounded-2xl rounded-tr-none max-w-[80%] ml-auto text-sm mb-4 shadow-md'
-                : 'bg-white border border-gray-100 shadow-sm p-4 rounded-2xl rounded-tl-none max-w-[80%] text-sm mb-4';
+                ? 'bg-gray-800 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] ml-auto text-sm mb-3 shadow-md'
+                : 'bg-white border border-gray-100 shadow-sm p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm mb-3';
             div.innerText = text;
             chatContainer.appendChild(div);
             chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -228,7 +303,7 @@
             const id = 'typing-' + Date.now();
             const div = document.createElement('div');
             div.id = id;
-            div.className = 'bg-white p-4 rounded-2xl rounded-tl-none max-w-[40%] text-sm mb-4 text-gray-400 italic animate-pulse';
+            div.className = 'bg-white p-3 rounded-2xl rounded-tl-none max-w-[50%] text-sm mb-3 text-gray-400 italic animate-pulse shadow-sm border border-gray-50';
             div.innerText = 'typing... ✨';
             chatContainer.appendChild(div);
             chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -243,11 +318,12 @@
         window.clearMemory = function() {
             chatHistory = [];
             chatContainer.innerHTML = '';
-            timelineOutput.innerHTML = '';
+            timelineOutput.innerHTML = '<div class="text-center py-20 text-gray-400 font-medium">Chat with your AI Companion to build your schedule!</div>';
             widgetExamName.innerText = 'Tell me in chat...';
             widgetDaysLeft.innerText = '-';
             appendMessage('ai', "Memory wiped! 🧼 What are we studying next?");
             modal.classList.add('hidden');
+        }; // <-- Fixed missing bracket here!
 
         // Save Settings Logic
         document.getElementById('saveSettingsBtn').addEventListener('click', () => {
@@ -255,10 +331,76 @@
             userDailyHours = parseFloat(newHours);
             modal.classList.add('hidden');
             
-            // Have the AI confirm the change in the chat!
             appendMessage('ai', `Settings updated! ⚙️ I will now limit your schedule to a maximum of ${userDailyHours} hours per day.`);
         });    
-        };
+        // --- Modal Open/Close Logic ---
+const pomodoroModal = document.getElementById('pomodoroModal');
+const pastPlansModal = document.getElementById('pastPlansModal');
+
+// Open Modals
+document.getElementById('pomodoroBtn').addEventListener('click', () => pomodoroModal.classList.remove('hidden'));
+document.getElementById('pastPlansBtn').addEventListener('click', () => pastPlansModal.classList.remove('hidden'));
+
+// Close Modals
+document.getElementById('closePomodoro').addEventListener('click', () => pomodoroModal.classList.add('hidden'));
+document.getElementById('closePastPlans').addEventListener('click', () => pastPlansModal.classList.add('hidden'));
+
+// --- Log Out Logic ---
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    // Since we don't have an auth backend yet, we simulate logging out
+    // by clearing session memory and sending you back to the landing page!
+    sessionStorage.clear();
+    window.location.href = '/'; 
+});
+
+// --- Pomodoro Timer Logic ---
+let pomodoroInterval;
+let timeLeft = 25 * 60; // 25 minutes in seconds
+let isTimerRunning = false;
+const timerDisplay = document.getElementById('timerDisplay');
+const startBtn = document.getElementById('startTimerBtn');
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerDisplay.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+document.getElementById('startTimerBtn').addEventListener('click', () => {
+    if (isTimerRunning) {
+        // Pause logic
+        clearInterval(pomodoroInterval);
+        startBtn.innerText = 'Resume';
+        startBtn.classList.replace('bg-matcha', 'bg-gray-900');
+        startBtn.classList.replace('text-gray-900', 'text-white');
+    } else {
+        // Start logic
+        startBtn.innerText = 'Pause';
+        startBtn.classList.replace('bg-gray-900', 'bg-matcha');
+        startBtn.classList.replace('text-white', 'text-gray-900');
+        pomodoroInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateTimerDisplay();
+            } else {
+                clearInterval(pomodoroInterval);
+                timerDisplay.innerText = "Done! 🎉";
+                // You could add a browser notification or chime sound here later!
+            }
+        }, 1000);
+    }
+    isTimerRunning = !isTimerRunning;
+});
+
+document.getElementById('resetTimerBtn').addEventListener('click', () => {
+    clearInterval(pomodoroInterval);
+    isTimerRunning = false;
+    timeLeft = 25 * 60;
+    updateTimerDisplay();
+    startBtn.innerText = 'Start';
+    startBtn.classList.replace('bg-matcha', 'bg-gray-900');
+    startBtn.classList.replace('text-gray-900', 'text-white');
+});
     </script>
 </body>
 </html>
